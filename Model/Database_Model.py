@@ -7,21 +7,21 @@ BASE = declarative_base()
 class User(BASE):
     __tablename__ = "User_table"
     ID = Column(
-        BIGINT(unsigned = True),
-        autoincrement= True,
-        nullable= False
+        INTEGER,
+        autoincrement=True,
+        nullable=False
         )
     Name = Column(
         String(50),
-        nullable= False
+        nullable=False
         )
     Phone = Column(
-        INTEGER(unsigned = True),
+        BIGINT,
         unique= True,
         nullable= False
         )      
     Email = Column(
-        String,
+        String(100),
         nullable=False
         )
     password = Column(
