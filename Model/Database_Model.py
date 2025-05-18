@@ -1,13 +1,13 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String
-from sqlalchemy.dialects.mssql import INTEGER
+from sqlalchemy import Column, String, CheckConstraint, PrimaryKeyConstraint
+from sqlalchemy.dialects.mssql import INTEGER, BIGINT
 
 BASE = declarative_base()
 
 class User(BASE):
-    __tablename__ = "User_details"
+    __tablename__ = "User_table"
     ID = Column(
-        INTEGER(unsigned = True),
+        BIGINT(unsigned = True),
         autoincrement= True,
         nullable= False
         )
@@ -15,8 +15,19 @@ class User(BASE):
         String(50),
         nullable= False
         )
+    Phone = Column(
+        INTEGER(unsigned = True),
+        unique= True,
+        nullable= False
+        )      
     Email = Column(
         String,
         nullable=False
         )
+    password = Column(
+        String(50),
+        nullable = False
+        )
+    __table_arge__ = PrimaryKeyConstraint(ID,Email)
+
     
