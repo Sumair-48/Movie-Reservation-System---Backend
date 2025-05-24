@@ -23,6 +23,8 @@ db_dependency = Annotated[Session,Depends(get_db)]
 async def sign_up(sign : Sign_up, db : db_dependency):
     return [sign_func(sign,db)]
 
+@router.get("/sign_in")
+
 
 
 

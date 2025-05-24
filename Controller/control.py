@@ -1,8 +1,8 @@
 from ..Model import Database_Model
 
-def sign_func(a,db):
-    new_acc = Database_Model.User(**a.model_dump())
-    db.add(new_acc)
+def sign_func(x,db):
+    sign_up = Database_Model.User(**x.model_dump())
+    db.add(sign_up)
     db.commit()
-    db.refresh(new_acc)
-    return new_acc
+    db.refresh(sign_up)
+    return sign_up
