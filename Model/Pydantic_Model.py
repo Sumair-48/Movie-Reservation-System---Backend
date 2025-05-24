@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from passlib.context import CryptContext
+from passlib.context import CryptContext # type: ignore
 
 pwt_cxt = CryptContext(schemes=['bycrpt'], deprecated = "auto")
 
@@ -23,4 +23,6 @@ class Sign_up(BaseModel):
 class Sign_in(BaseModel):
     Email : str
     password : str = Field(...,max_length=14)
+
+    
 

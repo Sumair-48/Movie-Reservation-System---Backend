@@ -3,3 +3,4 @@ pydantic
 SQLAlchemy
 pymysql
 passlib
+regex

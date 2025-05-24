@@ -22,9 +22,3 @@ db_dependency = Annotated[Session,Depends(get_db)]
 @router.post("/sign_up", response_model= List[Sign_up], status_code=status.HTTP_200_OK,tags=["Create Account"])
 async def sign_up(sign : Sign_up, db : db_dependency):
     return [sign_func(sign,db)]
-
-@router.get("/sign_in")
-
-
-
-
