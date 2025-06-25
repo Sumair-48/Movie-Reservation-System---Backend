@@ -16,7 +16,7 @@ class User(BASE):
         nullable=False
         )
     Phone = Column(
-        BIGINT(unsigned=True),
+        String(11),
         unique= True,
         nullable= False
         )      
@@ -25,7 +25,7 @@ class User(BASE):
         nullable=False
         )
     password = Column(
-        String(50),
+        String(70),
         nullable = False
         )
     __table_args__ = (
