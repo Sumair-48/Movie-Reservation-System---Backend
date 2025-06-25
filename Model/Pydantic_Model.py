@@ -43,16 +43,18 @@ class Sign_up(BaseModel):
 
 class User_response(BaseModel):
     Name : str
-    Phone : str = Field(...,min_length=10 ,max_length=11)
+    Phone : str 
     Email : str
-    password : str
 
     class Config:
         from_attributes = True
 
-# class Sign_in(BaseModel):
-#     Email : str
-#     password : str = Field(...,max_length=14)
-
+class Sign_in(BaseModel):
+    Name : str
+    Phone : str
+    Email : str
+    
+    class Config:
+        from_attributes = True
     
 
