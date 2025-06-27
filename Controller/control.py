@@ -1,5 +1,6 @@
 from ..Model import Database_Model
 from .. Model import Pydantic_Model
+from fastapi import HTTPException, status
 
 
 def sign_func(x,db):
@@ -15,9 +16,12 @@ def get_users(db):
 
 
 def get_user_acc(Email,password,db):
-    password = Pydantic_Model.pwt_cxt.hash(password)
-    user_acc = db.query(Database_Model.User).filter(
-        Database_Model.User.Email == Email and 
-        Database_Model.User.password == password
-        ).first()
-    return user_acc
+    user_acc = db.query(Database_Model.User).filter(Database_Model.User.Email == Email).first()
+
+    if not user_acc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User does not found!!")
+
+    if Pydantic_Model.Hash.verify_pass(password, user_acc.password):
+        return user_acc
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password!")

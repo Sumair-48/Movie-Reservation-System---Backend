@@ -45,4 +45,4 @@ async def get_all(db:db_dependency):
 
 async def user_acc(Email:str,password:str, db: db_dependency):
     user = get_user_acc(Email,password,db)
-    return {user}
+    return [user]
