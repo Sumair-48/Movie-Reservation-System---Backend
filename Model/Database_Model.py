@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, PrimaryKeyConstraint, func
-from sqlalchemy.dialects.mysql import INTEGER, BIGINT, DATETIME
+from sqlalchemy.dialects.mysql import INTEGER, BIGINT, DATE
 
 BASE = declarative_base()
 
@@ -34,7 +34,7 @@ class User(BASE):
     
 
 class Movie(BASE):
-    __table_name__ = "Movie Table"
+    __tablename__ = "Movie_Table"
     ID = Column(
         BIGINT(unsigned=True),
         autoincrement = True,
@@ -43,7 +43,8 @@ class Movie(BASE):
         )
     Title = Column(
         String(25),
-        nullable=False
+        nullable=False,
+        unique= True
     )
     Genre = Column(
         String(20),
@@ -62,8 +63,14 @@ class Movie(BASE):
         nullable= False
     )
     Re_Date = Column(
-        DATETIME, server_default= func.now(), onupdate=func.now(),
+        DATE,
         nullable= False
     )
-
-    __table_args__ = (PrimaryKeyConstraint(ID,Title),)
+    Description = Column(
+        String(100),
+        nullable = False
+    )
+    __table_args__ = (
+        PrimaryKeyConstraint(ID,Title),
+    )
+    

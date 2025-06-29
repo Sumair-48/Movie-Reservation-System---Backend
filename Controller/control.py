@@ -25,3 +25,14 @@ def get_user_acc(Email,password,db):
         return user_acc
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password!")
+    
+def movies(db):
+    return db.query(Database_Model.Movie).all()
+ 
+
+def add_new_movies(y,db):
+    new_movies = Database_Model.Movie(**y.model_dump())
+    db.add(new_movies)
+    db.commit()
+    db.refresh(new_movies)
+    return new_movies

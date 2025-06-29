@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from passlib.context import CryptContext
+from datetime import date
 
 pwt_cxt = CryptContext(schemes=['bcrypt'], deprecated = "auto")
 
@@ -58,3 +59,15 @@ class Sign_in(BaseModel):
         from_attributes = True
     
 
+class Movie_response(BaseModel):
+    Title : str
+    Genre : str
+    Duration : int
+    Language : str
+    Rating : str
+    Re_Date : date
+    Description : str
+
+    class Config:
+        from_attributes = True
+        from_orm = True

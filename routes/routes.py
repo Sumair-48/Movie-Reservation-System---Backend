@@ -2,10 +2,9 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from ..connection import SessionLocal
 from typing import Annotated, List
 from sqlalchemy.orm import Session
-from ..Model.Pydantic_Model import Sign_up, User_response, Sign_in
+from ..Model.Pydantic_Model import Sign_up, User_response, Sign_in, Movie_response
 from ..Model import Database_Model
-from ..Controller.control import sign_func, get_users, get_user_acc
-
+from ..Controller.control import sign_func, get_users, get_user_acc, movies, add_new_movies
 router = APIRouter(
     prefix="/v1"
 )
@@ -47,3 +46,16 @@ async def user_acc(Email:str,password:str, db: db_dependency):
     user = get_user_acc(Email,password,db)
     return [user]
 
+@router.get(
+    "/movies/filter/",
+    response_model=List[Movie_response],
+    status_code=status.HTTP_200_OK,
+    tags=["Movie Get All"]
+)
+def movie_filter(db: db_dependency):
+    return movies(db)
+
+@router.post("/movies/",response_model=List[Movie_response], status_code=status.HTTP_200_OK, tags=["Add Movie"])
+def add_Movies(movie_model: Movie_response, db:db_dependency):
+    movies = add_new_movies(movie_model,db)
+    return [movies]
