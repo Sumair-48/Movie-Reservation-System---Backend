@@ -40,7 +40,8 @@ async def get_all(db:db_dependency):
 
 @router.get("/user/sign_in", 
             response_model=List[Sign_in], 
-            status_code=status.HTTP_302_FOUND, tags=["Users Account"])
+            status_code=status.HTTP_302_FOUND,
+            tags=["Users Account"])
 
 async def user_acc(Email:str,password:str, db: db_dependency):
     user = get_user_acc(Email,password,db)
@@ -55,7 +56,10 @@ async def user_acc(Email:str,password:str, db: db_dependency):
 def movie_filter(db: db_dependency):
     return movies(db)
 
-@router.post("/movies/",response_model=List[Movie_response], status_code=status.HTTP_200_OK, tags=["Add Movie"])
+@router.post("/movies/",
+             response_model=List[Movie_response],
+             status_code=status.HTTP_200_OK, tags=["Add Movie"])
+
 def add_Movies(movie_model: Movie_response, db:db_dependency):
     movies = add_new_movies(movie_model,db)
     return [movies]

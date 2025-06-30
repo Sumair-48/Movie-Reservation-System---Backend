@@ -5,3 +5,6 @@ pymysql
 passlib
 regex
 bcrypt
+pydantic-settings
+python-dotenv
+uvicorn
