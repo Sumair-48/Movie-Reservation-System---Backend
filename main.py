@@ -1,16 +1,14 @@
 from fastapi import FastAPI
-from .connection import engine
-from .Model import Database_Model
-from .routes import routes
 from contextlib import asynccontextmanager
+from routes import routes
+from init_db import init_db
 
 @asynccontextmanager
 async def life_span(app: FastAPI):
     print("Server is starting.....")
-    Database_Model.BASE.metadata.create_all(engine)
+    init_db()
     yield
     print("Server has been shutdown")
-
 
 
 app = FastAPI (

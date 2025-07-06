@@ -4,6 +4,8 @@ from sqlalchemy.dialects.mysql import INTEGER, BIGINT, DATE
 
 BASE = declarative_base()
 
+# User Table 
+
 class User(BASE):
     __tablename__ = "User_table"
     ID = Column(
@@ -32,6 +34,7 @@ class User(BASE):
         PrimaryKeyConstraint(ID,Email),
     )
     
+#  Movie Table
 
 class Movie(BASE):
     __tablename__ = "Movie_Table"
