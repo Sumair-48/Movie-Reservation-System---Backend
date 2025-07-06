@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, PrimaryKeyConstraint, func
-from sqlalchemy.dialects.mysql import INTEGER, BIGINT, DATE
+from sqlalchemy.dialects.mysql import INTEGER, BIGINT, DATE, BOOLEAN
 
 BASE = declarative_base()
 
@@ -15,7 +15,8 @@ class User(BASE):
         )
     Name = Column(
         String(50),
-        nullable=False
+        nullable=False,
+        index= True
         )
     Phone = Column(
         String(11),
@@ -24,12 +25,18 @@ class User(BASE):
         )      
     Email = Column(
         String(100),
-        nullable=False
+        nullable=False,
+        index=True
         )
     password = Column(
         String(70),
         nullable = False
         )
+    is_admin = Column(
+        BOOLEAN,
+        nullable=False,
+        default=False
+    )
     __table_args__ = (
         PrimaryKeyConstraint(ID,Email),
     )

@@ -5,12 +5,16 @@ from datetime import date
 
 pwt_cxt = CryptContext(schemes=['bcrypt'], deprecated = "auto")
 
+# Hash class
+
 class Hash():
     def hash_pass(value):
         return pwt_cxt.hash(value)
     
     def verify_pass(value,hash_value):
         return pwt_cxt.verify(value,hash_value)
+    
+# Regestration class for User
     
 class Sign_up(BaseModel):
     Name : str
@@ -41,6 +45,40 @@ class Sign_up(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Regestration class for Admin
+    
+class Sign_up_admin(BaseModel):
+    Name : str
+    Phone : str = Field(...,min_length=10 ,max_length=11)
+    Email : str
+    password : str = Field(..., min_length= 8 ,max_length=14)
+    is_admin : bool
+
+    @field_validator("Phone", mode="before")
+    def check_no(cls,value):
+        value = str(value)
+
+        if value.startswith("0"):
+            value = value[1:]
+        
+        if not value.isdigit():
+            raise ValueError("Phone number must be numeric")
+
+        if len(value) != 10 :
+            raise ValueError("Phone no length must be 10")
+        
+        return str(value)
+    
+    @field_validator("password",mode="after")
+    def hash_pass(cls,value) -> str:
+        if isinstance(value,str) and value.startswith("$2b$"):
+            return value
+        return pwt_cxt.hash(value)
+
+    class Config:
+        from_attributes = True
+
 
 class User_response(BaseModel):
     Name : str
