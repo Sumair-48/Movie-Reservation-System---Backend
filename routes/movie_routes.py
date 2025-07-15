@@ -24,6 +24,7 @@ async def get_movie(movie_name:str, db:dependencies.db_dependency):
     get_film = Movie_control.get_a_movie(movie_name,db)
     return get_film
 
+
 @router.get("/movies_filter",
             response_model=List[Pydantic_Model.Movie_response],
             status_code=status.HTTP_302_FOUND)
@@ -44,3 +45,12 @@ async def movie_filter(
         query = Movie_control.get_language(db, language)
 
     return query.all()
+
+
+@router.delete("/delete_movie/{id}",
+               status_code=status.HTTP_200_OK)
+
+async def delete_movie(id:int, db:dependencies.db_dependency):
+    delete_film = Movie_control.delete_a_movie(id,db)
+    return delete_film
+
