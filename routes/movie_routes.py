@@ -47,10 +47,4 @@ async def movie_filter(
     return query.all()
 
 
-@router.delete("/delete_movie/{id}",
-               status_code=status.HTTP_200_OK)
-
-async def delete_movie(id:int, db:dependencies.db_dependency):
-    delete_film = Movie_control.delete_a_movie(id,db)
-    return delete_film
 

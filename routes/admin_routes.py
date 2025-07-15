@@ -33,3 +33,9 @@ async def update_movie(movie_name:str,
     movie_data_update = Admin_control.update_movie(movie_name,request,db)
     return movie_data_update
 
+@router.delete("/delete_movie/{id}",
+               status_code=status.HTTP_200_OK)
+
+async def delete_movie(id:int, db:dependencies.db_dependency):
+    delete_film = Admin_control.delete_a_movie(id,db)
+    return delete_film

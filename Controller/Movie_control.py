@@ -22,8 +22,4 @@ def get_language(db, language:str):
     return query
 
 
-def delete_a_movie(id,db):
-    movie_delete = db.query(Database_Model.Movie).filter(Database_Model.Movie.ID == id).first()
-    db.delete(movie_delete)
-    db.commit()
-    return "Movie has been deleted"
+
