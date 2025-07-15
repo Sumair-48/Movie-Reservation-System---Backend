@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from routes.auth_routes import router as auth_router
 from routes.admin_routes import router as admin_router
 from routes.movie_routes import router as movie_router
+from routes.user_routes import router as user_router
 from init_db import init_db
 
 @asynccontextmanager
@@ -23,3 +24,4 @@ app = FastAPI (
 app.include_router(auth_router, prefix="/v1")
 app.include_router(admin_router, prefix="/v1")
 app.include_router(movie_router, prefix="/v1")
+app.include_router(user_router, prefix="/v1")

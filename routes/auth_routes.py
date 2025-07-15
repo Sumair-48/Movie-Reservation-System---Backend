@@ -40,6 +40,6 @@ async def sign_up_admin(sign : Pydantic_Model.Sign_up_admin, db : dependencies.d
             response_model=List[Pydantic_Model.Sign_in], 
             status_code=status.HTTP_302_FOUND)
 
-async def user_acc(Email:str,password:str, db: dependencies.db_dependency):
+async def user_account(Email:str,password:str, db: dependencies.db_dependency):
     user = Auth_control.get_user_acc(Email,password,db)
     return [user]

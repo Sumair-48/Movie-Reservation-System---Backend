@@ -79,8 +79,10 @@ class Sign_up_admin(BaseModel):
     class Config:
         from_attributes = True
 
+ # User details
 
 class User_response(BaseModel):
+    ID : int
     Name : str
     Phone : str 
     Email : str
@@ -96,6 +98,7 @@ class Sign_in(BaseModel):
     class Config:
         from_attributes = True
     
+#Movie response model   
 
 class Movie_response(BaseModel):
     Title : str
