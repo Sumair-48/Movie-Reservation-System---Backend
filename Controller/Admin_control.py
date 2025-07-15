@@ -15,3 +15,14 @@ def add_new_movies(y,db):
     db.commit()
     db.refresh(new_movies)
     return new_movies
+
+
+def update_movie(movie_name,request,db):
+    update = db.query(Database_Model.Movie).filter(Database_Model.Movie.Title == movie_name).first()
+    update_film = request.model_dump(exclude_unset = True)
+    for field, values in update_film.items():
+        setattr(update, field, values)
+
+    db.commit()
+    db.refresh(update)
+    return update

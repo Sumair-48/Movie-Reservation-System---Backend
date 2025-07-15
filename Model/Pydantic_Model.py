@@ -112,3 +112,18 @@ class Movie_response(BaseModel):
     class Config:
         from_attributes = True
         from_orm = True
+
+# for Patch Update response model
+
+class Movie_response_patch(BaseModel):
+    Title : Optional[str] = None
+    Genre : Optional[str] = None
+    Duration : Optional[int] = None
+    Language : Optional[str] = None
+    Rating : Optional[str] = None
+    Re_Date : Optional[date] = None
+    Description : Optional[str] = None
+
+    class Config:
+        from_attributes = True
+        from_orm = True

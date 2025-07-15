@@ -21,7 +21,7 @@ app = FastAPI (
 )
 
 
-app.include_router(auth_router, prefix="/v1")
-app.include_router(admin_router, prefix="/v1")
-app.include_router(movie_router, prefix="/v1")
-app.include_router(user_router, prefix="/v1")
+app.include_router(auth_router, prefix="/api/v1")
+app.include_router(admin_router, prefix="/api/v1")
+app.include_router(movie_router, prefix="/api/v1")
+app.include_router(user_router, prefix="/api/v1")

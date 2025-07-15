@@ -22,3 +22,14 @@ async def get_all_users(db:dependencies.db_dependency):
 def add_Movies(movie_model: Pydantic_Model.Movie_response, db:dependencies.db_dependency):
     movies = Admin_control.add_new_movies(movie_model,db)
     return movies
+
+@router.patch("/update_movie/{movie_name}",
+              response_model=Pydantic_Model.Movie_response_patch,
+              status_code=status.HTTP_200_OK)
+
+async def update_movie(movie_name:str,
+                       request: Pydantic_Model.Movie_response_patch,
+                        db:dependencies.db_dependency):
+    movie_data_update = Admin_control.update_movie(movie_name,request,db)
+    return movie_data_update
+
