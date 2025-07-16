@@ -18,7 +18,7 @@ async def sign_up_user(sign : Pydantic_Model.Sign_up, db : dependencies.db_depen
     if not user:
         raise HTTPException(status_code=400, detail="User creation failed")
 
-    return [Pydantic_Model.User_response(**sign.dict())]
+    return [Pydantic_Model.User_response.model_validate(user)]
 
 
 # Regestration Of Admin

@@ -127,3 +127,15 @@ class Movie_response_patch(BaseModel):
     class Config:
         from_attributes = True
         from_orm = True
+
+
+# patch for user response
+
+class User_response_patch(BaseModel):
+    
+    Name : Optional[str] = None
+    Phone : Optional[str] = None 
+    Email : Optional[str] = None
+
+    class Config:
+        from_attributes = True
