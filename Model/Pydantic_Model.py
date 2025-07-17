@@ -139,3 +139,12 @@ class User_response_patch(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Screen Response Model
+
+class Screen_response(BaseModel):
+    ID : int
+    Name : str
+
+    class Config:
+        from_attributes = True

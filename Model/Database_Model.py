@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, PrimaryKeyConstraint, func, ForeignKey
-from sqlalchemy.dialects.mysql import INTEGER, BIGINT, DATE, BOOLEAN, DATETIME, FLOAT
+from sqlalchemy.dialects.mysql import INTEGER, DATE, BOOLEAN, DATETIME, FLOAT, TIME
 from datetime import datetime
 from sqlalchemy.orm import relationship
 
@@ -157,6 +157,10 @@ class Showtime(BASE):
         DATETIME,
         nullable=False
         )
+    End_time = Column(
+        TIME,
+        nullable= False
+    )
 
     movie = relationship("Movie", back_populates="showtimes")
     screen = relationship("Screen", back_populates="showtimes")

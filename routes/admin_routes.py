@@ -23,6 +23,16 @@ def add_Movies(movie_model: Pydantic_Model.Movie_response, db:dependencies.db_de
     movies = Admin_control.add_new_movies(movie_model,db)
     return movies
 
+
+@router.get("/screens",
+            response_model=List[Pydantic_Model.Screen_response],
+            status_code=status.HTTP_200_OK)
+
+async def view_screens(db:dependencies.db_dependency):
+    get_screen = Admin_control.get_screens(db)
+    return get_screen
+
+
 @router.patch("/update_movie/{movie_name}",
               response_model=Pydantic_Model.Movie_response_patch,
               status_code=status.HTTP_200_OK)

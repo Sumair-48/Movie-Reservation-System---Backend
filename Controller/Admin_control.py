@@ -32,3 +32,6 @@ def delete_a_movie(id,db):
     db.delete(movie_delete)
     db.commit()
     return "Movie has been deleted"
+
+def get_screens(db):
+    return db.query(Database_Model.Screen).all()
