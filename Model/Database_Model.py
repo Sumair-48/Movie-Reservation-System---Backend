@@ -50,7 +50,7 @@ class User(BASE):
 class Movie(BASE):
     __tablename__ = "Movie_Table"
     ID = Column(
-        BIGINT(unsigned=True),
+        INTEGER(unsigned=True),
         autoincrement = True,
         nullable= False,
         unique= True
@@ -102,42 +102,15 @@ class Screen(BASE):
         nullable=False
     )
     Name = Column(
-        String,
+        String(20),
         unique=True,
         nullable= True
     )
 
-    seats = relationship("Seat", back_populates="Screens")
-    showtime = relationship("Showtime", back_populates="Screen")
+    seats = relationship("Seat", back_populates="screens")
+    showtime = relationship("Showtime", back_populates="screen")
 
-
-# Showtime table
-
-class Showtime(BASE):
-    __tablename__ = "Showtime"
-    
-    ID = Column(
-        INTEGER,
-        autoincrement=True,
-        nullable = False,
-        unique= True
-    )
-    Movie_ID = Column(
-        INTEGER,
-        ForeignKey("Movie_Table.ID"),
-        nullable= False
-    )
-    Start_time = Column(
-        DATETIME,
-        nullable= False
-    )
-    Screen = Column(
-        String
-    )
-    
-    movie = relationship("Movie", back_populates="Showtime")
-    screen = relationship("Screen", back_populates="showtime")
-    reservation = relationship("Reservation", back_populates="Showtime")
+# Seats Table
 
 class Seats(BASE):
     __tablename__ = "Seats"
@@ -153,12 +126,44 @@ class Seats(BASE):
         ForeignKey("Showtime.ID")
     )
     Seat_number = Column(
-        String,
+        String(20),
         nullable= False
     )
 
     screen = relationship("Screen", back_populates="Seats")
     reservation_seats = relationship("Reservation", back_populates="Seats")
+
+# Showtime table
+
+class Showtime(BASE):
+    __tablename__ = "Showtime"
+    
+    ID = Column(
+        INTEGER,
+        primary_key= True,
+        autoincrement=True,
+        nullable = False,
+        unique= True
+    )
+    Movie_ID = Column(
+        INTEGER (unsigned = True),
+        ForeignKey("Movie_Table.ID"),
+        nullable= False
+    )
+    Screen_ID = Column(
+        INTEGER,
+        ForeignKey("Screens.ID"),
+        nullable=False
+    )
+    Start_time = Column(
+        DATETIME,
+        nullable= False
+    )
+    
+    movie = relationship("Movie", back_populates="showtime")
+    screen = relationship("Screen", back_populates="showtime")
+    reservation = relationship("Reservation", back_populates="showtime")
+
 
 
 class Reservation(BASE):
@@ -171,8 +176,8 @@ class Reservation(BASE):
         nullable= False
     )
     User_ID = Column(
-        INTEGER,
-        ForeignKey("User_Table.ID")
+        INTEGER(unsigned = True),
+        ForeignKey("User_table.ID")
     )
     Showtime_ID = Column(
         INTEGER,
@@ -187,7 +192,7 @@ class Reservation(BASE):
         default=1000
     )
     Status = Column(
-        String,
+        String(20),
         default="confirmed"
     )
 
