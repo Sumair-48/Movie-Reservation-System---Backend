@@ -19,7 +19,8 @@ async def get_all_users(db:dependencies.db_dependency):
              response_model=Pydantic_Model.Movie_response,
              status_code=status.HTTP_200_OK)
 
-def add_Movies(movie_model: Pydantic_Model.Movie_response, db:dependencies.db_dependency):
+def add_Movies(movie_model: Pydantic_Model.Movie_response,
+                db:dependencies.db_dependency):
     movies = Admin_control.add_new_movies(movie_model,db)
     return movies
 

@@ -1,9 +1,10 @@
-from fastapi import APIRouter, status, HTTPException
-from typing import List
+from fastapi import APIRouter, status, HTTPException, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import List, Annotated
 from Model import Pydantic_Model
 from utils import dependencies
 from Controller import Auth_control
-
+from datetime import timedelta
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -43,3 +44,16 @@ async def sign_up_admin(sign : Pydantic_Model.Sign_up_admin, db : dependencies.d
 async def user_account(Email:str,password:str, db: dependencies.db_dependency):
     user = Auth_control.get_user_acc(Email,password,db)
     return [user]
+
+
+@router.post("/token",
+             response_model=Pydantic_Model.Token,
+             status_code=status.HTTP_200_OK)
+
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+                                  db: dependencies.db_dependency):
+    user = Auth_control.get_user_acc(form_data.username,form_data.password,db)
+    token = Auth_control.create_access_token(user.Email,user.ID,user.is_admin,timedelta(minutes=20))
+    return token
+
+

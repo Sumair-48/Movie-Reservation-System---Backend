@@ -8,3 +8,6 @@ bcrypt
 pydantic-settings
 python-dotenv
 uvicorn
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart

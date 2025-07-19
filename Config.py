@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from dotenv import find_dotenv, load_dotenv
+import os
 
 dot_env = find_dotenv()
 
@@ -9,7 +10,13 @@ class Settings(BaseSettings):
     database_url : str
 
     class Config:
-        env_file = ".env"
+        env_file = ".env.DATABASE_URL"
 
 # Create an instance
 settings = Settings()
+
+secret_key = os.getenv("SECRET_KEY")
+algorithm = os.getenv("ALGORITHM")
+
+# print("Secret Key:", secret_key)
+# print("Algorithm:", algorithm)

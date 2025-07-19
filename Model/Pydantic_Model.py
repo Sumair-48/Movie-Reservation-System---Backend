@@ -148,3 +148,14 @@ class Screen_response(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Access token
+
+class Token(BaseModel):
+    access_token : str
+    token_type : str
+
+    class Config:
+        from_attributes = True
+
+
