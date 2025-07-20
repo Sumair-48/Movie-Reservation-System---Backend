@@ -98,3 +98,21 @@ async def delete_movie(id:int, db:dependencies.db_dependency, current_user: depe
         HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                       detail=f"movie id {id} not found")
     return delete_film
+
+@router.post("/add_showtime", response_model=Pydantic_Model.Showtime,
+             status_code=status.HTTP_200_OK)
+
+async def showtime(request:Pydantic_Model.Showtime,
+                   db: dependencies.db_dependency,
+                   current_user: dependencies.user_dependency):
+    
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
+    
+    add_film_showtime = Admin_control.add_show_time(request,db)
+
+    if not add_film_showtime:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="Showtime does not add")
+    return add_film_showtime

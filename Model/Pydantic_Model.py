@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from passlib.context import CryptContext
-from datetime import date
+from datetime import date, datetime, time
 
 pwt_cxt = CryptContext(schemes=['bcrypt'], deprecated = "auto")
 
@@ -189,3 +189,13 @@ class Token(BaseModel):
         from_attributes = True
 
 
+# Showtime response mode 
+
+class Showtime(BaseModel):
+    Movie_ID : int
+    Screen_ID : int
+    Start_time : datetime
+    End_time : time
+
+    class Config:
+        from_attributes = True

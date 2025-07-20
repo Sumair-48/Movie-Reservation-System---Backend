@@ -41,3 +41,12 @@ def delete_a_movie(id,db):
 
 def get_screens(db):
     return db.query(Database_Model.Screen).all()
+
+
+def add_show_time(request,db):
+    add_showtime = Database_Model.Showtime(**request.model_dump())
+    db.add(add_showtime)
+    db.commit()
+    db.refresh(add_showtime)
+    return add_showtime
+
