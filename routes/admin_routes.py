@@ -13,8 +13,14 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
             response_model=List[Pydantic_Model.User_response], 
             status_code=status.HTTP_200_OK)
 
-async def get_all_users(db:dependencies.db_dependency):
+async def get_all_users(db:dependencies.db_dependency, current_user:dependencies.user_dependency):
+
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
+    
     get_all = Admin_control.get_users(db)
+
     if not get_all:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Could not get all the users")
@@ -27,7 +33,12 @@ async def get_all_users(db:dependencies.db_dependency):
              status_code=status.HTTP_200_OK)
 
 def add_Movies(movie_model: Pydantic_Model.Movie_response,
-                db:dependencies.db_dependency):
+                db:dependencies.db_dependency,
+                current_user: dependencies.user_dependency):
+    
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
     
     movies = Admin_control.add_new_movies(movie_model,db)
     if not movies:
@@ -41,8 +52,12 @@ def add_Movies(movie_model: Pydantic_Model.Movie_response,
             response_model=List[Pydantic_Model.Screen_response],
             status_code=status.HTTP_200_OK)
 
-async def view_screens(db:dependencies.db_dependency):
+async def view_screens(db:dependencies.db_dependency, current_user: dependencies.user_dependency):
 
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
+    
     get_screen = Admin_control.get_screens(db)
     if not get_screen:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -57,7 +72,12 @@ async def view_screens(db:dependencies.db_dependency):
 
 async def update_movie(movie_name:str,
                        request: Pydantic_Model.Movie_response_patch,
-                        db:dependencies.db_dependency):
+                        db:dependencies.db_dependency,
+                        current_user: dependencies.user_dependency):
+    
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
     
     movie_data_update = Admin_control.update_movie(movie_name,request,db)
 
@@ -69,8 +89,10 @@ async def update_movie(movie_name:str,
 @router.delete("/delete_movie/{id}",
                status_code=status.HTTP_200_OK)
 
-async def delete_movie(id:int, db:dependencies.db_dependency):
+async def delete_movie(id:int, db:dependencies.db_dependency, current_user: dependencies.user_dependency):
     
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Only Admin Can Access")
     delete_film = Admin_control.delete_a_movie(id,db)
     if not delete_film:
         HTTPException(status_code=status.HTTP_404_NOT_FOUND,

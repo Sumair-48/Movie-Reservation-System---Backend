@@ -20,11 +20,16 @@ async def User_details(email:str,
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail= "User Only Access")
     
-    get_user = User_control.get_user_details(email, db)
+    if current_user["username"] != email:
+        raise HTTPException(status_code=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+                            detail="Not Authorized user")
+    
+    get_user = User_control.get_user_details(email,db)
 
     if not get_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="User not found")
+    
     return get_user
 
 # Update Account Detail
@@ -41,6 +46,10 @@ async def update_account(email:str,
     if current_user["role"] !="user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="User Only Access")
+    
+    if current_user["username"] != email:
+        raise HTTPException(status_code=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+                            detail="Not Authorized User")
     
     update = User_control.change_account(email,request,db)
 
@@ -61,6 +70,10 @@ async def delete_account(email:str, db:dependencies.db_dependency,
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="User Only Access")
     
+    if current_user["username"] != email:
+        raise HTTPException(status_code=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+                            detail="Not Authorized User")
+
     data = User_control.delete_user(email,db)
     
     if not data:

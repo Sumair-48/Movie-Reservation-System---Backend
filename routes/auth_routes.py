@@ -35,16 +35,7 @@ async def sign_up_admin(sign : Pydantic_Model.Sign_up_admin, db : dependencies.d
 
     return [Pydantic_Model.User_response.model_validate(user)]
 
-
-
-@router.get("/user/sign_in", 
-            response_model=List[Pydantic_Model.Sign_in], 
-            status_code=status.HTTP_302_FOUND)
-
-async def user_account(Email:str,password:str, db: dependencies.db_dependency):
-    user = Auth_control.get_user_acc(Email,password,db)
-    return [user]
-
+# Login form 
 
 @router.post("/token",
              response_model=Pydantic_Model.Token,

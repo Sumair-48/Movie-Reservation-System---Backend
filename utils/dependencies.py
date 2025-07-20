@@ -31,4 +31,5 @@ async def get_current_user(token:Annotated[str,Depends(oauth2_bearer)]):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Could not validate the user")
     
-user_dependency = Annotated[dict,Depends(get_current_user)]
+user_dependency = Annotated[dict, Depends(get_current_user)]
+
