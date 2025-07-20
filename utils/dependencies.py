@@ -32,8 +32,3 @@ async def get_current_user(token:Annotated[str,Depends(oauth2_bearer)]):
                             detail="Could not validate the user")
     
 user_dependency = Annotated[dict,Depends(get_current_user)]
-
-async def get_current_user_only(current_user: dict = Depends(user_dependency)):
-    if current_user["role"] != "user":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User access only")
-    return current_user

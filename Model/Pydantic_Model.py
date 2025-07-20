@@ -127,15 +127,45 @@ class Movie_response_patch(BaseModel):
     class Config:
         from_attributes = True
         from_orm = True
+# patch for user response
 
+
+class User_response_patch_new(BaseModel):
+    
+    Name : Optional[str] = None
+    Phone : Optional[str] = None
+    Email : Optional[str] = None
+    password : Optional[str] = None
 
 # patch for user response
 
 class User_response_patch(BaseModel):
     
     Name : Optional[str] = None
-    Phone : Optional[str] = None 
+    Phone : Optional[str] = Field(default=None ,min_length=10 ,max_length=11)
     Email : Optional[str] = None
+    password : Optional[str] = Field(default=None, min_length= 8 ,max_length=14)
+
+    @field_validator("Phone", mode="before")
+    def check_no(cls,value):
+        value = str(value)
+
+        if value.startswith("0"):
+            value = value[1:]
+        
+        if not value.isdigit():
+            raise ValueError("Phone number must be numeric")
+
+        if len(value) != 10 :
+            raise ValueError("Phone no length must be 10")
+        
+        return str(value)
+    
+    @field_validator("password",mode="after")
+    def hash_pass(cls,value) -> str:
+        if isinstance(value,str) and value.startswith("$2b$"):
+            return value
+        return pwt_cxt.hash(value)
 
     class Config:
         from_attributes = True

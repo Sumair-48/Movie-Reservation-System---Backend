@@ -1,6 +1,5 @@
 from Model import Database_Model
 
-
 #Get all the user in the system
 
 def get_users(db):
