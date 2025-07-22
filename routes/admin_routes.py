@@ -106,6 +106,12 @@ async def update_movie(movie_name:str,
                             detail="Could to update movie")
     return movie_data_update
 
+@router.patch("/update_showtime/{id}",response_model=Pydantic_Model.patch_showtime,status_code=status.HTTP_200_OK)
+async def update_showtime ():
+    pass
+
+
+
 # delete Movie
 
 @router.delete("/delete_movie/{id}",

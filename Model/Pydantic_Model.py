@@ -217,7 +217,7 @@ class get_showtime(BaseModel):
 
 # showtime patch response model
 
-class get_showtime(BaseModel):
+class patch_showtime(BaseModel):
     Movie_name :Optional[str]= None
     Screen_ID : Optional[int]= None
     Start_time : Optional[time] = None
