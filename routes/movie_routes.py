@@ -55,4 +55,13 @@ async def movie_filter(
     return query.all()
 
 
+@router.get("/showtime",
+            response_model=List[Pydantic_Model.get_showtime],
+            status_code=status.HTTP_200_OK)
 
+async def get_all_showtime(db:dependencies.db_dependency):
+    get_all_films = Movie_control.get_showtime(db)
+    if not get_all_films:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="Could not get showtime")
+    return get_all_films

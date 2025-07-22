@@ -193,9 +193,36 @@ class Token(BaseModel):
 
 class Showtime(BaseModel):
     Movie_ID : int
+    Movie_name : str
     Screen_ID : int
-    Start_time : datetime
+    Start_time : time
     End_time : time
+    Show_date : date
+
+    class Config:
+        from_attributes = True
+
+
+# showtime get response model
+
+class get_showtime(BaseModel):
+    Movie_name : str
+    Screen_ID : int
+    Start_time : time
+    End_time : time
+    Show_date : date
+
+    class Config:
+        from_attributes = True
+
+# showtime patch response model
+
+class get_showtime(BaseModel):
+    Movie_name :Optional[str]= None
+    Screen_ID : Optional[int]= None
+    Start_time : Optional[time] = None
+    End_time : Optional[time] = None
+    Show_date : Optional[date] = None
 
     class Config:
         from_attributes = True

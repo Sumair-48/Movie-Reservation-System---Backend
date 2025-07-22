@@ -26,6 +26,24 @@ async def get_all_users(db:dependencies.db_dependency, current_user:dependencies
                             detail="Could not get all the users")
     return get_all
 
+# Screens
+
+@router.get("/screens",
+            response_model=List[Pydantic_Model.Screen_response],
+            status_code=status.HTTP_200_OK)
+
+async def view_screens(db:dependencies.db_dependency, current_user: dependencies.user_dependency):
+
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
+    
+    get_screen = Admin_control.get_screens(db)
+    if not get_screen:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="Could not get screens")
+    return get_screen
+
 # Add movies
 
 @router.post("/add_movies/",
@@ -46,23 +64,25 @@ def add_Movies(movie_model: Pydantic_Model.Movie_response,
                             detail= "Could not add the movies")
     return movies
 
-# Screens
+# Add Show time
 
-@router.get("/screens",
-            response_model=List[Pydantic_Model.Screen_response],
-            status_code=status.HTTP_200_OK)
+@router.post("/add_showtime", response_model=Pydantic_Model.Showtime,
+             status_code=status.HTTP_200_OK)
 
-async def view_screens(db:dependencies.db_dependency, current_user: dependencies.user_dependency):
-
+async def showtime(request:Pydantic_Model.Showtime,
+                   db: dependencies.db_dependency,
+                   current_user: dependencies.user_dependency):
+    
     if current_user["role"] != "admin":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    get_screen = Admin_control.get_screens(db)
-    if not get_screen:
+    add_film_showtime = Admin_control.add_show_time(request,db)
+
+    if not add_film_showtime:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail="Could not get screens")
-    return get_screen
+                            detail="Showtime does not add")
+    return add_film_showtime
 
 # Update movie details
 
@@ -86,6 +106,8 @@ async def update_movie(movie_name:str,
                             detail="Could to update movie")
     return movie_data_update
 
+# delete Movie
+
 @router.delete("/delete_movie/{id}",
                status_code=status.HTTP_200_OK)
 
@@ -98,21 +120,3 @@ async def delete_movie(id:int, db:dependencies.db_dependency, current_user: depe
         HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                       detail=f"movie id {id} not found")
     return delete_film
-
-@router.post("/add_showtime", response_model=Pydantic_Model.Showtime,
-             status_code=status.HTTP_200_OK)
-
-async def showtime(request:Pydantic_Model.Showtime,
-                   db: dependencies.db_dependency,
-                   current_user: dependencies.user_dependency):
-    
-    if current_user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Only Admin Can Access")
-    
-    add_film_showtime = Admin_control.add_show_time(request,db)
-
-    if not add_film_showtime:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail="Showtime does not add")
-    return add_film_showtime

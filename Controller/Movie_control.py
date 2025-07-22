@@ -21,5 +21,6 @@ def get_language(db, language:str):
     query = query.filter(Database_Model.Movie.Language.ilike(f"%{language}%"))
     return query
 
-
+def get_showtime(db):
+    return db.query(Database_Model.Showtime).all()
 

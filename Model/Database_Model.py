@@ -49,7 +49,6 @@ class Movie(BASE):
 
     ID = Column(
         INTEGER(unsigned=True),
-        primary_key=True,
         autoincrement=True,
         nullable=False,
         unique=True
@@ -83,7 +82,7 @@ class Movie(BASE):
         String(100),
         nullable=False
         )
-
+    PrimaryKeyConstraint(ID,Title)
     showtimes = relationship("Showtime", back_populates="movie")
 
 class Screen(BASE):
@@ -148,17 +147,29 @@ class Showtime(BASE):
         ForeignKey("Movie_Table.ID"),
         nullable=False
         )
+    Movie_name = Column(
+        String(25),
+        ForeignKey("Movie_Table.Title"),
+        unique=True,
+        nullable= False
+    )
     Screen_ID = Column(
         INTEGER(unsigned=True),
         ForeignKey("Screens.ID"),
         nullable=False
         )
     Start_time = Column(
-        DATETIME,
-        nullable=False
+        TIME,
+        nullable=False,
+        unique= True
         )
     End_time = Column(
         TIME,
+        nullable= False,
+        unique= True
+    )
+    Show_date = Column(
+        DATE,
         nullable= False
     )
 
