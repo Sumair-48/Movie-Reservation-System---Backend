@@ -36,4 +36,12 @@ def create_access_token(username:str, user_id:int,is_admin:bool, expires_delta: 
         "token_type": "bearer"
     }
     
+def create_refresh_token(username:str, user_id:int, is_admin:bool, expires_delta: timedelta):
+    role = "admin" if is_admin == 1 else "user"
+    encode = {'sub': username, 'id': user_id, 'role': role}
+    expires = datetime.utcnow() + expires_delta
+    encode.update({'exp': expires})
+    refresh_token = jwt.encode(encode, secret_key, algorithm)
+    return refresh_token
+
 

@@ -44,7 +44,10 @@ async def sign_up_admin(sign : Pydantic_Model.Sign_up_admin, db : dependencies.d
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                   db: dependencies.db_dependency):
     user = Auth_control.get_user_acc(form_data.username,form_data.password,db)
-    token = Auth_control.create_access_token(user.Email,user.ID,user.is_admin,timedelta(minutes=20))
-    return token
-
-
+    access_token = Auth_control.create_access_token(user.Email,user.ID,user.is_admin,timedelta(minutes=20))
+    refresh_token = Auth_control.create_refresh_token(user.Email, user.ID, user.is_admin, timedelta(days=7))
+    return {
+        "access_token": access_token["access_token"],
+        "token_type": access_token["token_type"],
+        "refresh_token": refresh_token
+    }

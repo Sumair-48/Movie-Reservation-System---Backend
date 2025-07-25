@@ -83,7 +83,7 @@ class Movie(BASE):
         nullable=False
         )
     PrimaryKeyConstraint(ID,Title)
-    showtimes = relationship("Showtime", back_populates="movie")
+    showtimes = relationship("Showtime", back_populates="movie",foreign_keys="[Showtime.Movie_ID]")
 
 class Screen(BASE):
     __tablename__ = "Screens"
@@ -173,7 +173,7 @@ class Showtime(BASE):
         nullable= False
     )
 
-    movie = relationship("Movie", back_populates="showtimes")
+    movie = relationship("Movie", back_populates="showtimes",foreign_keys="[Showtime.Movie_ID]")
     screen = relationship("Screen", back_populates="showtimes")
     reservations = relationship("Reservation", back_populates="showtime")
 
