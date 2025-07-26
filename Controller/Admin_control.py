@@ -50,3 +50,15 @@ def add_show_time(request,db):
     db.refresh(add_showtime)
     return add_showtime
 
+def update_showtime(id,request,db):
+
+    showtime = db.query(Database_Model.Showtime).filter(Database_Model.Showtime.ID == id).first()
+    if not showtime:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Showtime not found")
+    showtime_update = request.model_dump(exclude_unset=True)
+    for field, value in showtime_update.items():
+        setattr(showtime, field, value)
+    db.commit()
+    db.refresh(showtime)
+    return showtime

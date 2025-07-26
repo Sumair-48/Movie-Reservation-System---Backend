@@ -106,10 +106,25 @@ async def update_movie(movie_name:str,
                             detail="Could to update movie")
     return movie_data_update
 
-@router.patch("/update_showtime/{id}",response_model=Pydantic_Model.patch_showtime,status_code=status.HTTP_200_OK)
-async def update_showtime ():
-    pass
+@router.patch("/update_showtime/{id}",
+              response_model=Pydantic_Model.get_showtime,
+              status_code=status.HTTP_200_OK)
 
+async def update_showtime (showtime_id:int,
+                           request: Pydantic_Model.patch_showtime,
+                           db: dependencies.db_dependency,
+                           current_user: dependencies.user_dependency):
+    
+    if current_user["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Only Admin Can Access")
+    
+    update_showtime = Admin_control.update_showtime(showtime_id, request,db)
+    
+    if not update_showtime:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="Could not update showtime")
+    return update_showtime
 
 
 # delete Movie
