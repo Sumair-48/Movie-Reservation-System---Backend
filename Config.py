@@ -17,6 +17,4 @@ settings = Settings()
 
 secret_key = os.getenv("SECRET_KEY")
 algorithm = os.getenv("ALGORITHM")
-
-# print("Secret Key:", secret_key)
-# print("Algorithm:", algorithm)
+refresh_key = os.getenv("REFRESH_SECRET_KEY")

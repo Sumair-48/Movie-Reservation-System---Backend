@@ -1,8 +1,8 @@
 from Model import Database_Model, Pydantic_Model
 from fastapi import HTTPException, status
 from datetime import timedelta, datetime
-from jose import  jwt
-from Config import secret_key, algorithm
+from jose import  jwt, JWTError, ExpiredSignatureError
+from Config import secret_key, algorithm, refresh_key
 
 #Register Fundtion
 
@@ -45,3 +45,27 @@ def create_refresh_token(username:str, user_id:int, is_admin:bool, expires_delta
     return refresh_token
 
 
+def verify_access_token(token:str):
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise ValueError("Invalid token payload")
+        return payload
+    except ExpiredSignatureError:
+        raise Exception("Token has expired")
+    except JWTError:
+        raise Exception("Invalid token")
+    
+
+def verify_refresh_token(token:str):
+    try:
+        payload = jwt.decode(token, refresh_key, algorithms=[algorithm])
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise ValueError("Invalid token payload")
+        return payload
+    except ExpiredSignatureError:
+        raise Exception("Refresh token has expired")
+    except JWTError:
+        raise Exception("Invalid refresh token")
