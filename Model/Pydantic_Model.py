@@ -189,6 +189,11 @@ class Token(BaseModel):
     class Config:
         from_attributes = True
 
+# Refresh Token
+
+class Refresh_Token(BaseModel):
+    refresh_token : str
+
 
 # Showtime response mode 
 

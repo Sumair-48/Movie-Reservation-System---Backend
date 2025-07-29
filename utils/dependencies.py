@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
-from Config import secret_key,algorithm
-from jose import jwt, JWTError
+from Config import secret_key,algorithm, refresh_key
+from jose import jwt, JWTError, ExpiredSignatureError
 
 def get_db():
     db = SessionLocal()
@@ -17,6 +17,7 @@ db_dependency = Annotated[Session,Depends(get_db)]
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
 
+
 async def get_current_user(token:Annotated[str,Depends(oauth2_bearer)]):
     try:
         payload = jwt.decode(token,secret_key,algorithms=[algorithm])
@@ -27,6 +28,8 @@ async def get_current_user(token:Annotated[str,Depends(oauth2_bearer)]):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Could not validate the user")
         return {'username':username, 'id':user_id, 'role':role}
+    except ExpiredSignatureError:
+        raise Exception("Token is Expired")
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Could not validate the user")
