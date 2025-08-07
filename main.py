@@ -9,7 +9,6 @@ from init_db import init_db
 @asynccontextmanager
 async def life_span(app: FastAPI):
     print("Server is starting.....")
-    init_db()
     yield
     print("Server has been shutdown")
 
