@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from Config import secret_key,algorithm, refresh_key
 from jose import jwt, JWTError, ExpiredSignatureError
 
-def get_db():
+async def get_db():
     db = SessionLocal()
     try:
         yield db
