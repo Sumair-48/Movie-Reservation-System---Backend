@@ -24,7 +24,7 @@ async def User_details(email:str,
         raise HTTPException(status_code=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
                             detail="Not Authorized user")
     
-    get_user = User_control.get_user_details(email,db)
+    get_user = await User_control.get_user_details(email,db)
 
     if not get_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -51,7 +51,7 @@ async def update_account(email:str,
         raise HTTPException(status_code=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
                             detail="Not Authorized User")
     
-    update = User_control.change_account(email,request,db)
+    update = await User_control.change_account(email,request,db)
 
     if not update:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -74,7 +74,7 @@ async def delete_account(email:str, db:dependencies.db_dependency,
         raise HTTPException(status_code=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
                             detail="Not Authorized User")
 
-    data = User_control.delete_user(email,db)
+    data = await User_control.delete_user(email,db)
     
     if not data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

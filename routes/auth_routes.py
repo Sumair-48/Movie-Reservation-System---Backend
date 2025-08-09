@@ -15,7 +15,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
              status_code=status.HTTP_200_OK)
 
 async def sign_up_user(sign : Pydantic_Model.Sign_up, db : dependencies.db_dependency):
-    user = Auth_control.sign_func(sign, db)
+    user = await Auth_control.sign_func(sign, db)
     if not user:
         raise HTTPException(status_code=400, detail="User creation failed")
 
@@ -43,9 +43,9 @@ async def sign_up_admin(sign : Pydantic_Model.Sign_up_admin, db : dependencies.d
 
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                   db: dependencies.db_dependency):
-    user = Auth_control.get_user_acc(form_data.username,form_data.password,db)
-    access_token = Auth_control.create_access_token(user.Email,user.ID,user.is_admin,timedelta(minutes=1))
-    refresh_token = Auth_control.create_refresh_token(user.Email, user.ID, user.is_admin, timedelta(days=7))
+    user = await Auth_control.get_user_acc(form_data.username,form_data.password,db)
+    access_token = await Auth_control.create_access_token(user.Email,user.ID,user.is_admin,timedelta(minutes=1))
+    refresh_token = await Auth_control.create_refresh_token(user.Email, user.ID, user.is_admin, timedelta(days=7))
     return {
         "access_token": access_token["access_token"],
         "token_type": access_token["token_type"],
@@ -56,8 +56,8 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
 @router.post("/refresh",
              status_code=status.HTTP_200_OK)
 
-def refresh_token(token_data : Pydantic_Model.Refresh_Token):
-    payload = Auth_control.verify_refresh_token(token_data.refresh_token)
+async def refresh_token(token_data : Pydantic_Model.Refresh_Token):
+    payload = await Auth_control.verify_refresh_token(token_data.refresh_token)
     
     if not payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -72,7 +72,7 @@ def refresh_token(token_data : Pydantic_Model.Refresh_Token):
                             detail="Invalid token payload")
     
     is_admin = True if role == "admin" else False
-    new_token = Auth_control.create_access_token(
+    new_token = await Auth_control.create_access_token(
         username=username,
         user_id=user_id,
         is_admin=is_admin,

@@ -4,6 +4,7 @@ from Model import Pydantic_Model
 from utils import dependencies
 from Controller import Movie_control
 from Model import Database_Model
+from sqlalchemy.future import select
 
 router = APIRouter(prefix="/movie", tags=["Movie"])
 
@@ -13,7 +14,8 @@ router = APIRouter(prefix="/movie", tags=["Movie"])
     status_code=status.HTTP_200_OK
 )
 async def get_all_movies(db: dependencies.db_dependency):
-    return Movie_control.movies(db)
+    result =  await Movie_control.movies(db)
+    return result
 
 # Get Movies 
 
@@ -23,7 +25,7 @@ async def get_all_movies(db: dependencies.db_dependency):
 
 async def get_movie(movie_name:str, db:dependencies.db_dependency):
 
-    get_film = Movie_control.get_a_movie(movie_name,db)
+    get_film = await Movie_control.get_a_movie(movie_name,db)
 
     if not get_film:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -42,17 +44,18 @@ async def movie_filter(
     language: Optional[str] = None,
     db: dependencies.db_dependency
 ):
-    query = db.query(Database_Model.Movie)
+    query = await db.execute(select(Database_Model.Movie))
+
 
     if not genre:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"{genre} not found")
-    query = Movie_control.get_genre(db, genre)
+    query = await Movie_control.get_genre(db, genre)
 
     if not language:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{language} not found")
-    query = Movie_control.get_language(db, language)
+    query = await Movie_control.get_language(db, language)
 
-    return query.all()
+    return query.scalars().all()
 
 
 @router.get("/showtime",
@@ -60,7 +63,7 @@ async def movie_filter(
             status_code=status.HTTP_200_OK)
 
 async def get_all_showtime(db:dependencies.db_dependency):
-    get_all_films = Movie_control.get_showtime(db)
+    get_all_films = await Movie_control.get_showtime(db)
     if not get_all_films:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Could not get showtime")

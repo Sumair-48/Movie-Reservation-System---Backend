@@ -4,7 +4,6 @@ from routes.auth_routes import router as auth_router
 from routes.admin_routes import router as admin_router
 from routes.movie_routes import router as movie_router
 from routes.user_routes import router as user_router
-from init_db import init_db
 
 @asynccontextmanager
 async def life_span(app: FastAPI):
