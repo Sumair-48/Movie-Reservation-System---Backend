@@ -13,8 +13,8 @@ async def sign_func(x,db):
     await db.refresh(sign_up)
     return sign_up
 
-def get_user_acc(Email,password,db):
-    user_acc = db.query(Database_Model.User).filter(Database_Model.User.Email == Email).first()
+async def get_user_acc(Email,password,db):
+    user_acc = await db.query(Database_Model.User).filter(Database_Model.User.Email == Email).first()
 
     if not user_acc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User does not found!!")
