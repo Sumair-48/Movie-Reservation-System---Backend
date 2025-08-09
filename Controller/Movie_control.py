@@ -1,26 +1,29 @@
 from Model import Database_Model
+from sqlalchemy.future import select
 
 # Movies 
 
-def movies(db):
-    return db.query(Database_Model.Movie).all()
+async def movies(db):
+    movie = await db.execute(select(Database_Model.Movie))
+    return movie.scalars().all()
 
-def get_a_movie(movie_name,db):
-    return db.query(Database_Model.Movie).filter(Database_Model.Movie.Title == movie_name).first()
+async def get_a_movie(movie_name,db):
+    result = await db.execute(select(Database_Model.Movie).where(Database_Model.Movie.Title == movie_name))
+    return result.scalars().first()
 
-def get_movie(db):
-    return db.query(Database_Model.Movie)
+async def get_movie(db):
+    result = await db.execute(select(Database_Model.Movie))
+    return result.scalars().all()
 
-def get_genre(db, genre:str):
-    query = db.query(Database_Model.Movie)
-    query = query.filter(Database_Model.Movie.Genre.ilike(f"%{genre}%"))
-    return query
+async def get_genre(db, genre:str):
+    query = await db.execute(select(Database_Model.Movie).where(Database_Model.Movie.Genre.ilike(f"%{genre}%")))
+    return query.scalars().all()
 
-def get_language(db, language:str):
-    query = get_movie(db)
-    query = query.filter(Database_Model.Movie.Language.ilike(f"%{language}%"))
-    return query
+async def get_language(db, language:str):
+    query = await db.execute(select(Database_Model.Movie.Language.ilike(f"%{language}%")))
+    return query.scalars().all()
 
-def get_showtime(db):
-    return db.query(Database_Model.Showtime).all()
+async def get_showtime(db):
+    showtime = await db.execute(select(Database_Model.Showtime))
+    return showtime.scalars().all()
 

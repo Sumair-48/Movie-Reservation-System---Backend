@@ -27,7 +27,7 @@ async def update_movie(movie_name,request,db):
 
     update_film =  request.model_dump(exclude_unset = True)
     for field, values in update_film.items():
-        setattr(update, field, values)
+        setattr(movie, field, values)
 
     await db.commit()
     await db.refresh(movie)
@@ -56,7 +56,6 @@ async def add_show_time(request,db):
 
 async def update_showtime(id,request,db):
 
-    showtime = await db.query(Database_Model.Showtime).filter(Database_Model.Showtime.ID == id).first()
     showtime = await db.execute(select(Database_Model.Showtime).where(Database_Model.Showtime.ID == id))
 
     result = showtime.scalars().first()
@@ -67,7 +66,7 @@ async def update_showtime(id,request,db):
     showtime_update = request.model_dump(exclude_unset=True)
 
     for field, value in showtime_update.items():
-        setattr(showtime, field, value)
+        setattr(result, field, value)
     await db.commit()
     await db.refresh(result)
     return showtime

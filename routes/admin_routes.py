@@ -19,7 +19,7 @@ async def get_all_users(db:dependencies.db_dependency, current_user:dependencies
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    get_all = Admin_control.get_users(db)
+    get_all = await Admin_control.get_users(db)
 
     if not get_all:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -38,7 +38,7 @@ async def view_screens(db:dependencies.db_dependency, current_user: dependencies
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    get_screen = Admin_control.get_screens(db)
+    get_screen = await Admin_control.get_screens(db)
     if not get_screen:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Could not get screens")
@@ -50,7 +50,7 @@ async def view_screens(db:dependencies.db_dependency, current_user: dependencies
              response_model=Pydantic_Model.Movie_response,
              status_code=status.HTTP_200_OK)
 
-def add_Movies(movie_model: Pydantic_Model.Movie_response,
+async def add_Movies(movie_model: Pydantic_Model.Movie_response,
                 db:dependencies.db_dependency,
                 current_user: dependencies.user_dependency):
     
@@ -58,7 +58,7 @@ def add_Movies(movie_model: Pydantic_Model.Movie_response,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    movies = Admin_control.add_new_movies(movie_model,db)
+    movies = await Admin_control.add_new_movies(movie_model,db)
     if not movies:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail= "Could not add the movies")
@@ -77,7 +77,7 @@ async def showtime(request:Pydantic_Model.Showtime,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    add_film_showtime = Admin_control.add_show_time(request,db)
+    add_film_showtime = await Admin_control.add_show_time(request,db)
 
     if not add_film_showtime:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -99,7 +99,7 @@ async def update_movie(movie_name:str,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    movie_data_update = Admin_control.update_movie(movie_name,request,db)
+    movie_data_update = await Admin_control.update_movie(movie_name,request,db)
 
     if not movie_data_update:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -119,7 +119,7 @@ async def update_showtime (showtime_id:int,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Only Admin Can Access")
     
-    update_showtime = Admin_control.update_showtime(showtime_id, request,db)
+    update_showtime = await Admin_control.update_showtime(showtime_id, request,db)
     
     if not update_showtime:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -136,7 +136,7 @@ async def delete_movie(id:int, db:dependencies.db_dependency, current_user: depe
     
     if current_user["role"] != "admin":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Only Admin Can Access")
-    delete_film = Admin_control.delete_a_movie(id,db)
+    delete_film = await Admin_control.delete_a_movie(id,db)
     if not delete_film:
         HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                       detail=f"movie id {id} not found")

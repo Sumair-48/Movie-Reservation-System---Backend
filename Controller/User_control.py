@@ -1,27 +1,33 @@
 from fastapi import HTTPException, status
 from Model import Database_Model, Pydantic_Model
+from sqlalchemy.future import select
 
 # User Account details
 
-def get_user_details(email,db):
-    get_user = db.query(Database_Model.User).filter(Database_Model.User.Email == email).first()
-    return get_user
+async def get_user_details(email,db):
+    get_user = await db.execute(select(Database_Model.User).where(Database_Model.User.Email == email))
+    return get_user.scalars().first()
 
 
-def change_account(email,request,db):
-    query = db.query(Database_Model.User).filter(Database_Model.User.Email == email).first()
+async def change_account(email,request,db):
+
+    query = await db.execute(select(Database_Model.User).where(Database_Model.User.Email == email))
+
+    result = query.scalars().first()
+
     update_data = request.model_dump(exclude_unset = True)
     
     for field, values in update_data.items():
-        setattr(query,field,values)
+        setattr(result,field,values)
 
-    db.commit()
-    db.refresh(query)
-    return query
+    await db.commit()
+    await db.refresh(result)
+    return result
 
 
-def delete_user(email,db):
-    query = db.query(Database_Model.User).filter(Database_Model.User.Email == email).first()
-    db.delete(query)
-    db.commit()
+async def delete_user(email,db):
+    query = await db.execute(select(Database_Model.User).where(Database_Model.User.Email == email))
+    result = query.scalars().first()
+    await db.delete(result)
+    await db.commit()
     return "Account has been deleted"

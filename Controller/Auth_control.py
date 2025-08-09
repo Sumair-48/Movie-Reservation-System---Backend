@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from datetime import timedelta, datetime
 from jose import  jwt, JWTError, ExpiredSignatureError
 from Config import secret_key, algorithm, refresh_key
+from sqlalchemy.future import select
 
 #Register Fundtion
 
@@ -14,13 +15,15 @@ async def sign_func(x,db):
     return sign_up
 
 async def get_user_acc(Email,password,db):
-    user_acc = await db.query(Database_Model.User).filter(Database_Model.User.Email == Email).first()
+    user_acc = await db.execute(select(Database_Model.User).where(Database_Model.User.Email == Email))
 
-    if not user_acc:
+    result = user_acc.scalars().first()
+
+    if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User does not found!!")
 
-    if Pydantic_Model.Hash.verify_pass(password, user_acc.password):
-        return user_acc
+    if Pydantic_Model.Hash.verify_pass(password, result.password):
+        return result
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password!")
     
