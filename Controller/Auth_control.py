@@ -28,7 +28,7 @@ async def get_user_acc(Email,password,db):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password!")
     
 
-def create_access_token(username:str, user_id:int,is_admin:bool, expires_delta: timedelta):
+async def create_access_token(username:str, user_id:int,is_admin:bool, expires_delta: timedelta):
     role = "admin" if is_admin == 1 else "user"
     encode = {'sub': username, 'id':user_id, 'role':role}
     expires = datetime.utcnow() + expires_delta
@@ -39,7 +39,7 @@ def create_access_token(username:str, user_id:int,is_admin:bool, expires_delta: 
         "token_type": "bearer"
     }
     
-def create_refresh_token(username:str, user_id:int, is_admin:bool, expires_delta: timedelta):
+async def create_refresh_token(username:str, user_id:int, is_admin:bool, expires_delta: timedelta):
     role = "admin" if is_admin == 1 else "user"
     encode = {'sub': username, 'id': user_id, 'role': role}
     expires = datetime.utcnow() + expires_delta
@@ -48,7 +48,7 @@ def create_refresh_token(username:str, user_id:int, is_admin:bool, expires_delta
     return refresh_token
 
 
-def verify_refresh_token(token:str):
+async def verify_refresh_token(token:str):
     try:
         payload = jwt.decode(token, refresh_key, algorithms=[algorithm])
         user_id = payload.get("sub")
