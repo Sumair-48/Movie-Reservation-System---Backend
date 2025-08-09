@@ -13,6 +13,7 @@ class User(BASE):
     ID = Column(
         INTEGER,
         primary_key=True,
+        autoincrement=True,
         nullable=False,
         index=True
         )

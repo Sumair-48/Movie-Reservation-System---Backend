@@ -82,7 +82,6 @@ class Sign_up_admin(BaseModel):
  # User details
 
 class User_response(BaseModel):
-    ID : int
     Name : str
     Phone : str 
     Email : str

@@ -6,11 +6,11 @@ from Config import secret_key, algorithm, refresh_key
 
 #Register Fundtion
 
-def sign_func(x,db):
+async def sign_func(x,db):
     sign_up = Database_Model.User(**x.model_dump())
     db.add(sign_up)
-    db.commit()
-    db.refresh(sign_up)
+    await db.commit()
+    await db.refresh(sign_up)
     return sign_up
 
 def get_user_acc(Email,password,db):
