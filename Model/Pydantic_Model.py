@@ -197,7 +197,6 @@ class Refresh_Token(BaseModel):
 # Showtime response mode 
 
 class Showtime(BaseModel):
-    Movie_ID : int
     Movie_name : str
     Screen_ID : int
     Start_time : time
